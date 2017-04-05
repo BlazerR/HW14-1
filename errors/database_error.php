@@ -5,5 +5,6 @@
     <p>The database must be installed as described in the appendix.</p>
     <p>MySQL must be running as described in chapter 1.</p>
     <p class="last_paragraph">Error message: <?php echo $error_message; ?></p>
+    <p>&nbsp;</p>
 </main>
 <?php include '../view/footer.php'; ?>

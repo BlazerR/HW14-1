@@ -29,13 +29,46 @@ if ($action == 'list_products') {
     $categories = CategoryDB::getCategories();
     $products = ProductDB::getProductsByCategory($category_id);
 
-    include('product_list.php');
-} else if ($action == 'view_product') {
-    $categories = CategoryDB::getCategories();
+     include('product_list.php'); 
+ } else if ($action == 'delete_product') { 
+     // Get the IDs 
+     $product_id = $_POST['product_id']; 
+     $category_id = $_POST['category_id']; 
+  
+     // Delete the product 
+     $productDB->deleteProduct($product_id); 
+  
+     // Display the Product List page for the current category 
+     header("Location: .?category_id=$category_id"); 
+ } else if ($action == 'show_add_form') { 
+     $categories = $categoryDB->getCategories(); 
+     include('product_add.php'); 
+ } else if ($action == 'add_product') { 
+     $category_id = $_POST['category_id']; 
+     $code = $_POST['code']; 
+     $name = $_POST['name']; 
+     $price = $_POST['price']; 
+  
+     // Validate the inputs 
+     if (empty($code) || empty($name) || empty($price)) { 
+         $error = "Invalid product data. Check all fields and try again."; 
+         include('../errors/error.php'); 
+     } else { 
+         $current_category = $categoryDB->getCategory($category_id); 
+  
+         // Create the Product object 
+         $product = new Product(); 
+         $product->setCategory($current_category); 
+         $product->setCode($code); 
+         $product->setName($name); 
+         $product->setPrice($price); 
+  
+         // Add the Product object to the database 
+         $productDB->addProduct($product); 
+  
+         // Display the Product List page for the current category 
+         header("Location: .?category_id=$category_id 
 
-    $product_id = filter_input(INPUT_GET, 'product_id', 
-            FILTER_VALIDATE_INT);   
-    $product = ProductDB::getProduct($product_id);
 
     include('product_view.php');
 }
