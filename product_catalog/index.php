@@ -9,13 +9,14 @@ require('../model/product_db.php');
  $categoryDB = new CategoryDB(); 
  $productDB = new ProductDB 
 
-$action = filter_input(INPUT_POST, 'action');
-if ($action == NULL) {
-    $action = filter_input(INPUT_GET, 'action');
-    if ($action == NULL) {
-        $action = 'list_products';
-    }
-}  
+if (isset($_POST['action'])) { 
+     $action = $_POST['action']; 
+ } else if (isset($_GET['action'])) { 
+     $action = $_GET['action']; 
+ } else { 
+     $action = 'list_products'; 
+ } 
+
 
 if ($action == 'list_products') {
     $category_id = filter_input(INPUT_GET, 'category_id', 
