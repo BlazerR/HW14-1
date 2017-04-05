@@ -7,7 +7,8 @@ require('../model/product_db.php');
 
 // create the CategoryDB and ProductDB objects 
  $categoryDB = new CategoryDB(); 
- $productDB = new ProductDB 
+ $productDB = new ProductDB(); 
+
 
 if (isset($_POST['action'])) { 
      $action = $_POST['action']; 
@@ -17,29 +18,33 @@ if (isset($_POST['action'])) {
      $action = 'list_products'; 
  } 
 
-
 if ($action == 'list_products') {
+    // Get the current category ID
     $category_id = filter_input(INPUT_GET, 'category_id', 
             FILTER_VALIDATE_INT);
     if ($category_id == NULL || $category_id == FALSE) {
         $category_id = 1;
     }
 
+    // Get product and category data
     $current_category = CategoryDB::getCategory($category_id);
     $categories = CategoryDB::getCategories();
     $products = ProductDB::getProductsByCategory($category_id);
 
-     include('product_list.php'); 
- } else if ($action == 'delete_product') { 
-     // Get the IDs 
-     $product_id = $_POST['product_id']; 
-     $category_id = $_POST['category_id']; 
-  
-     // Delete the product 
-     $productDB->deleteProduct($product_id); 
-  
-     // Display the Product List page for the current category 
-     header("Location: .?category_id=$category_id"); 
+    // Display the product list
+    include('product_list.php');
+} else if ($action == 'delete_product') {
+    // Get the IDs
+    $product_id = filter_input(INPUT_POST, 'product_id', 
+            FILTER_VALIDATE_INT);
+    $category_id = filter_input(INPUT_POST, 'category_id', 
+            FILTER_VALIDATE_INT);
+
+    // Delete the product
+    ProductDB::deleteProduct($product_id);
+
+    // Display the Product List page for the current category
+   header("Location: .?category_id=$category_id"); 
  } else if ($action == 'show_add_form') { 
      $categories = $categoryDB->getCategories(); 
      include('product_add.php'); 
@@ -67,9 +72,8 @@ if ($action == 'list_products') {
          $productDB->addProduct($product); 
   
          // Display the Product List page for the current category 
-         header("Location: .?category_id=$category_id 
+         header("Location: .?category_id=$category_id"); 
+     } 
 
-
-    include('product_view.php');
 }
 ?>
