@@ -5,6 +5,10 @@ require('../model/category_db.php');
 require('../model/product.php');
 require('../model/product_db.php');
 
+// create the CategoryDB and ProductDB objects 
+ $categoryDB = new CategoryDB(); 
+ $productDB = new ProductDB 
+
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
     $action = filter_input(INPUT_GET, 'action');

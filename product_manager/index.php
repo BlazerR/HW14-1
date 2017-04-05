@@ -7,8 +7,7 @@ require('../model/product_db.php');
 
 // create the CategoryDB and ProductDB objects 
  $categoryDB = new CategoryDB(); 
- $productDB = new ProductDB(); 
-
+ $productDB = new ProductDB 
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
@@ -25,56 +24,18 @@ if ($action == 'list_products') {
         $category_id = 1;
     }
 
-    // Get product and category data
     $current_category = CategoryDB::getCategory($category_id);
     $categories = CategoryDB::getCategories();
     $products = ProductDB::getProductsByCategory($category_id);
 
-    // Display the product list
     include('product_list.php');
-} else if ($action == 'delete_product') {
-    // Get the IDs
-    $product_id = filter_input(INPUT_POST, 'product_id', 
-            FILTER_VALIDATE_INT);
-    $category_id = filter_input(INPUT_POST, 'category_id', 
-            FILTER_VALIDATE_INT);
-
-    // Delete the product
-    ProductDB::deleteProduct($product_id);
-
-    // Display the Product List page for the current category
-    header("Location: .?category_id=$category_id");
-} else if ($action == 'show_add_form') {
+} else if ($action == 'view_product') {
     $categories = CategoryDB::getCategories();
-    include('product_add.php');
-} else if ($action == 'add_product') {
-    $category_id = filter_input(INPUT_POST, 'category_id', 
-            FILTER_VALIDATE_INT);
-    $code = filter_input(INPUT_POST, 'code');
-    $name = filter_input(INPUT_POST, 'name');
-    $price = filter_input(INPUT_POST, 'price');
-    if ($category_id == NULL || $category_id == FALSE || $code == NULL || 
-            $name == NULL || $price == NULL || $price == FALSE) {
-        $error = "Invalid product data. Check all fields and try again.";
-        include('../errors/error.php');
-    } else {
-        $current_category = CategoryDB::getCategory($category_id);
-        $product = new Product($current_category, $code, $name, $price);
-        ProductDB::addProduct($product);
-        
-        // Create the Product object 
-         $product = new Product(); 
-         $product->setCategory($current_category); 
-         $product->setCode($code); 
-         $product->setName($name); 
-         $product->setPrice($price); 
-  
-         // Add the Product object to the database 
-         $productDB->addProduct($product); 
 
+    $product_id = filter_input(INPUT_GET, 'product_id', 
+            FILTER_VALIDATE_INT);   
+    $product = ProductDB::getProduct($product_id);
 
-        // Display the Product List page for the current category
-        header("Location: .?category_id=$category_id");
-    }
+    include('product_view.php');
 }
 ?>
