@@ -56,6 +56,17 @@ if ($action == 'list_products') {
         $current_category = CategoryDB::getCategory($category_id);
         $product = new Product($current_category, $code, $name, $price);
         ProductDB::addProduct($product);
+        
+        // Create the Product object 
+         $product = new Product(); 
+         $product->setCategory($current_category); 
+         $product->setCode($code); 
+         $product->setName($name); 
+         $product->setPrice($price); 
+  
+         // Add the Product object to the database 
+         $productDB->addProduct($product); 
+
 
         // Display the Product List page for the current category
         header("Location: .?category_id=$category_id");
