@@ -1,7 +1,7 @@
 <?php
     $dsn = 'mysql:host =sql1.njit.edu;dbname=br229';
     $username = 'br229';
-    $password = 'CHULA1616';
+    $password = '1Rm2Gizav';
 
     try {
         $db = new PDO($dsn, $username, $password);
